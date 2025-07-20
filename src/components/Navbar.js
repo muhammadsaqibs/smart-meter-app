@@ -20,7 +20,7 @@ function Navbar() {
         {isLoggedIn && <Link to="/dashboard">Dashboard</Link>}
         {!isLoggedIn && <Link to="/login">Login</Link>}
         {!isLoggedIn && <Link to="/register">Register</Link>}
-        {isLoggedIn && <button onClick={handleLogout}>Logout</button>}
+        {isLoggedIn && <button onClick={handleLogout}>Logout to the account</button>}
       </div>
     </nav>
   );
