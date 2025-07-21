@@ -1,23 +1,24 @@
-// client/src/components/Login.js
 import React, { useState } from 'react';
+import { Form, Button, Alert, Card } from 'react-bootstrap';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import axios from '../services/api';
+import '../styles/auth.css';
 
 function Login() {
-  const [form, setForm] = useState({ meterNumber: '', cnic: '' });
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     try {
-      const res = await axios.post('/auth/login', form);
+      const res = await axios.post('/api/auth/login', {
+        identifier,
+        password,
+      });
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
     } catch (err) {
@@ -26,29 +27,37 @@ function Login() {
   };
 
   return (
-    <div className="auth-form">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Meter Number</label>
-        <input
-          type="text"
-          name="meterNumber"
-          value={form.meterNumber}
-          onChange={handleChange}
-          required
-        />
-        <label>CNIC</label>
-        <input
-          type="text"
-          name="cnic"
-          value={form.cnic}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Login</button>
-        {error && <p className="error">{error}</p>}
-      </form>
-    </div>
+    <Card className="auth-card">
+      <Card.Body>
+        <h3 className="text-center mb-4">Login</h3>
+        {error && <Alert variant="danger">{error}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>CNIC or Meter Number</Form.Label>
+            <Form.Control
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="Enter CNIC or Meter Number"
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-4">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter Password"
+              required
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit" className="w-100">
+            Login
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 }
 

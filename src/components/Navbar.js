@@ -1,8 +1,8 @@
-// client/src/components/Navbar.js
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 
-function Navbar() {
+function AppNavbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -10,20 +10,33 @@ function Navbar() {
     navigate('/login');
   };
 
-  const isLoggedIn = !!localStorage.getItem('token');
-
   return (
-    <nav className="navbar">
-      <h2>⚡ SmartMeter</h2>
-      <div>
-        <Link to="/">Home</Link>
-        {isLoggedIn && <Link to="/dashboard">Dashboard</Link>}
-        {!isLoggedIn && <Link to="/login">Login</Link>}
-        {!isLoggedIn && <Link to="/register">Register</Link>}
-        {isLoggedIn && <button onClick={handleLogout}>Logout </button>}
-      </div>
-    </nav>
+    <Navbar bg="light" expand="lg" className="shadow-sm py-3">
+      <Container>
+        <Navbar.Brand as={NavLink} to="/" className="fw-bold text-primary">
+          ⚡ SmartMeter
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="smart-navbar" />
+        <Navbar.Collapse id="smart-navbar">
+          <Nav className="ms-auto">
+            <Nav.Link as={NavLink} to="/" end>
+              Home
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/dashboard">
+              Dashboard
+            </Nav.Link>
+            <Button
+              variant="outline-danger"
+              className="ms-3"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default AppNavbar;
